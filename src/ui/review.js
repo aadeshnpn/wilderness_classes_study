@@ -1,4 +1,4 @@
-import { cardIds, getCard } from "../data/cards.js";
+import { cardIds, getCard } from "../data/catalog.js";
 import { dueCardIds, effectiveStreak, gradeCard } from "../logic/model.js";
 import { disclaimer, esc, frame, pips } from "./layout.js";
 
@@ -54,8 +54,8 @@ export function reviewScreen(ctx) {
     return shell(`
       <p class="eyebrow">Review</p>
       <h2 class="page-title">Nothing ${noun === "cards" ? "in this set" : "due"}.</h2>
-      <p class="lede">The trail is quiet. You can still walk the Chapter 1 cards on purpose.</p>
-      <a class="btn primary" href="#/review/all">Practice Chapter 1 cards</a>
+      <p class="lede">The trail is quiet. You can still walk every card on purpose.</p>
+      <a class="btn primary" href="#/review/all">Practice every card</a>
       <a class="btn ghost" href="#/path">Back to the trail</a>
       ${disclaimer()}
     `);
@@ -67,7 +67,7 @@ export function reviewScreen(ctx) {
       <h2 class="page-title">This pass is clear.</h2>
       <p class="lede">Graded cards move to their next day. Come back when they are due, or keep going on the trail.</p>
       <a class="btn primary" href="#/">Home</a>
-      <a class="btn ghost" href="#/review/all">Practice all Chapter 1 cards</a>
+      <a class="btn ghost" href="#/review/all">Practice every card</a>
       ${disclaimer()}
     `);
   }
@@ -86,7 +86,7 @@ export function reviewScreen(ctx) {
 
   return shell(
     `
-      <p class="eyebrow">Card ${index + 1} of ${queue.length} · Chapter 1</p>
+      <p class="eyebrow">Card ${index + 1} of ${queue.length}</p>
       <div class="card-head">${pips(memory?.box)}${esc(card.title)}</div>
       <h2 class="prompt">${esc(card.prompt)}</h2>
       ${body}

@@ -1,4 +1,4 @@
-import { cardIds } from "../data/cards.js";
+import { cardIds } from "../data/catalog.js";
 import {
   GOAL_CHOICES,
   dueCardIds,

@@ -1,5 +1,4 @@
-import { getLesson, lessonIds } from "../data/lessons.js";
-import { cardIds } from "../data/cards.js";
+import { cardIds, chapterOf, getLesson, lessonIds } from "../data/catalog.js";
 import {
   dueCardIds,
   effectiveStreak,
@@ -38,7 +37,9 @@ export function homeScreen(ctx) {
   const next = nextId ? getLesson(nextId) : null;
   const record = nextId ? ctx.state.lessons[nextId] : null;
   const resume = next ? resumeCopy(record, next) : null;
-  const stageDone = lessonIds.filter((id) => ctx.state.lessons[id]?.status === "complete").length;
+  const stage = next ? chapterOf(next.id) : null;
+  const stageIds = stage ? stage.lessons.map((lesson) => lesson.id) : [];
+  const stageDone = stageIds.filter((id) => ctx.state.lessons[id]?.status === "complete").length;
 
   let banner = "";
   if (welcome.kind === "paused") {
@@ -72,18 +73,18 @@ export function homeScreen(ctx) {
         <p class="eyebrow">${esc(resume.label)} · ${next.minutes} min</p>
         <h2>${esc(next.title)}</h2>
         <p>${esc(resume.detail)}</p>
-        <p class="hero-meta">Patient Assessment · ${stageDone}/6</p>
+        <p class="hero-meta">${stage.number} · ${esc(stage.title)} · ${stageDone}/${stageIds.length}</p>
         <span class="hero-go">${esc(resume.label)}</span>
       </a>`
     : `<section class="hero hero-static">
-        <p class="eyebrow">Chapter 1</p>
-        <h2>Patient assessment is in your pocket.</h2>
+        <p class="eyebrow">Trail</p>
+        <h2>The open chapters are in your pocket.</h2>
         <p>Replay any lesson from the trail, or run the cards again from Review.</p>
         <a class="hero-go" href="#/path">Open the trail</a>
       </section>`;
 
   const main = `
-    <p class="lede">Patient assessment, one short lesson at a time.</p>
+    <p class="lede">One short lesson at a time.</p>
     ${banner}
     <section class="goal" aria-label="Daily goal">
       <div class="goal-row"><span>Daily goal</span><span>${shown}/${goal}${done >= goal ? " · met" : ""} · ~${goalMinutes(goal)} min</span></div>
