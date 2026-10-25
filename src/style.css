@@ -212,6 +212,16 @@ a { text-decoration: none; }
   line-height: 1.15;
 }
 .page-title { font-size: 2rem; }
+.stage { margin: 0 0 22px; }
+.stage-title {
+  margin: 0 0 6px;
+  font-family: var(--display);
+  font-weight: 560;
+  font-size: 1.45rem;
+  letter-spacing: -0.03em;
+  line-height: 1.15;
+}
+.stage .lede { margin-bottom: 10px; }
 .prompt { font-size: 1.7rem; }
 
 .goal { margin: 8px 0 16px; }
