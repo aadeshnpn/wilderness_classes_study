@@ -1,21 +1,20 @@
-import { laterChapters, lessonIds, lessons } from "../data/lessons.js";
-import { cardIds } from "../data/cards.js";
+import { cardIds, chapters, lessonIds, upcomingChapters } from "../data/catalog.js";
 import { dueCardIds, effectiveStreak, lessonPhase } from "../logic/model.js";
 import { disclaimer, esc, frame, markerIcon } from "./layout.js";
 
-export function trailScreen(ctx) {
-  const streak = effectiveStreak(ctx.state, ctx.today);
-  const due = dueCardIds(ctx.state, ctx.today, cardIds);
-  const done = lessonIds.filter((id) => ctx.state.lessons[id]?.status === "complete").length;
-  const passed = ctx.state.checkpoint.passed;
-
-  const nodes = lessons
+function stageSection(ctx, chapter) {
+  const ids = chapter.lessons.map((lesson) => lesson.id);
+  const done = ids.filter((id) => ctx.state.lessons[id]?.status === "complete").length;
+  const checkpoint = chapter.lessons.find((lesson) => lesson.checkpoint);
+  const clear = Boolean(checkpoint && ctx.state.lessons[checkpoint.id]?.status === "complete");
+  const nodes = chapter.lessons
     .map((lesson) => {
       const phase = lessonPhase(ctx.state, lesson.id, lessonIds);
       const record = ctx.state.lessons[lesson.id];
+      const cleared = lesson.checkpoint && record?.status === "complete";
       const score =
         lesson.checkpoint && record?.lastScore != null
-          ? `${record.lastScore}/${record.lastTotal}${record.passed || passed ? " · clear" : ""}`
+          ? `${record.lastScore}/${record.lastTotal}${cleared ? " · clear" : ""}`
           : "";
       const stateLabel = phase === "complete" ? "Done" : phase === "current" ? "Open" : "Locked";
       const inner = `
@@ -31,23 +30,35 @@ export function trailScreen(ctx) {
     })
     .join("");
 
-  const later = laterChapters
-    .map(
-      ([number, title]) =>
-        `<li><span>${number}</span> ${esc(title)} <em>Soon</em></li>`,
-    )
+  return `
+    <section class="stage">
+      <h2 class="stage-title">${chapter.number} · ${esc(chapter.title)}</h2>
+      <p class="lede">${done} of ${ids.length} lessons${clear ? " · checkpoint clear" : ""}.</p>
+      <div class="trail-list">${nodes}</div>
+    </section>`;
+}
+
+export function trailScreen(ctx) {
+  const streak = effectiveStreak(ctx.state, ctx.today);
+  const due = dueCardIds(ctx.state, ctx.today, cardIds);
+  const later = upcomingChapters()
+    .map(([number, title]) => `<li><span>${number}</span> ${esc(title)} <em>Soon</em></li>`)
     .join("");
+  const stages = chapters.map((chapter) => stageSection(ctx, chapter)).join("");
+  const laterBlock = later
+    ? `<section class="later">
+        <h3>Later on the trail</h3>
+        <p>These chapters stay closed until they are on the trail.</p>
+        <ul>${later}</ul>
+      </section>`
+    : "";
 
   const main = `
     <p class="eyebrow">Wilderness First Aid</p>
-    <h2 class="page-title">1 · Patient Assessment</h2>
-    <p class="lede">${done} of 6 lessons${passed ? " · checkpoint clear" : ""}.</p>
-    <div class="trail-list">${nodes}</div>
-    <section class="later">
-      <h3>Later on the trail</h3>
-      <p>Chapters 2–20 stay closed in this version.</p>
-      <ul>${later}</ul>
-    </section>
+    <h2 class="page-title">The trail</h2>
+    <p class="lede">Finish a chapter checkpoint and the next chapter opens.</p>
+    ${stages}
+    ${laterBlock}
     ${disclaimer()}
   `;
 

@@ -1,6 +1,6 @@
 # MedOnMt WFA
 
-A calm, phone-first study trail for Wilderness First Aid. This version is Chapter 1, Patient Assessment: six short lessons, card review, and a checkpoint. It is a study aid, not medical advice and not a certification.
+A calm, phone-first study trail for Wilderness First Aid. Chapter 1, Patient Assessment, is always included. Later chapters are files in `src/data/chapters/` and show up on the trail in chapter order. The next chapter opens after the previous checkpoint is clear. Chapters that are not in the build stay listed as coming later. It is a study aid, not medical advice and not a certification.
 
 The app name on the home screen is **MedOnMt WFA**. The later public host is `wfa.medonmt.org`, with the site files living in the document root `/wfa.medonmt.org`. Nothing here deploys that host for you.
 
@@ -27,11 +27,11 @@ Routes use the URL hash (`#/path`, `#/lesson/wfa-01-a`), so a plain Apache or Re
 ## What’s in this version
 
 - Home, with one-tap Continue, a daily goal (default **2 lessons**, about 15 minutes), and a streak that advances when you finish one lesson
-- Trail stage **1 · Patient Assessment** (`wfa-01-a` through `wfa-01-f`). Chapters 2–20 are listed as coming later
+- Trail stage **1 · Patient Assessment** (`wfa-01-a` through `wfa-01-f`), plus any chapter files in the build. The next chapter opens when the previous checkpoint is clear. Chapters that are not built yet stay marked Soon
 - Lessons mix a short explanation, retrieval cards, multiple choice, ordering, and one trail scenario
 - A wrong answer shows the reason immediately. There are no hearts and nothing locks you out
 - Chapter checkpoint clears at 70%. You can retry
-- Leitner review for the 16 Chapter 1 cards (hard tomorrow, OK in 3 days, easy in 7, then 14)
+- Leitner review for every card in the build (hard tomorrow, OK in 3 days, easy in 7, then 14)
 - Optional partner checklist and links to AWLS videos, practice exams, and the textbook. They never gate a lesson
 - One streak pause per week, covering a single missed day, plus a quiet welcome back
 - Settings to change the goal (1, 2, or 4 lessons), export or import progress, or clear it
@@ -39,4 +39,4 @@ Routes use the URL hash (`#/path`, `#/lesson/wfa-01-a`), so a plain Apache or Re
 
 ## Out of scope
 
-Chapters 2–20, accounts, push notifications, and deploying to the host.
+Chapters that are not in this build, accounts, push notifications, and deploying to the host.
