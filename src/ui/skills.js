@@ -1,4 +1,4 @@
-import { cardIds } from "../data/cards.js";
+import { addedPartnerChecks, cardIds } from "../data/catalog.js";
 import { AWLS, partnerDrill, videoNotes } from "../data/skills.js";
 import { dueCardIds, effectiveStreak, toggleSkill } from "../logic/model.js";
 import { disclaimer, esc, frame } from "./layout.js";
@@ -18,12 +18,24 @@ export function skillsScreen(ctx) {
     })
     .join("");
   const videos = videoNotes.map((note) => `<li>${esc(note)}</li>`).join("");
+  const added = addedPartnerChecks()
+    .map((item) => {
+      const on = Boolean(ctx.state.skillsChecks[item.id]);
+      return `<li>
+        <label class="check">
+          <input type="checkbox" data-action="toggle-skill" data-item="${esc(item.id)}" ${on ? "checked" : ""} />
+          <span>${esc(item.label)}</span>
+        </label>
+      </li>`;
+    })
+    .join("");
 
   const main = `
     <p class="eyebrow">Hands on</p>
     <h2 class="page-title">Partner skills</h2>
     <p class="lede">Optional. These drills never gate a lesson or the checkpoint. Check them when you have a person and a floor.</p>
     <ul class="checklist">${checks}</ul>
+    ${added ? `<section class="panel"><h3>From the open chapters</h3><ul class="checklist">${added}</ul></section>` : ""}
     <section class="panel">
       <h3>Videos on the AWLS page</h3>
       <ul class="plain">${videos}</ul>

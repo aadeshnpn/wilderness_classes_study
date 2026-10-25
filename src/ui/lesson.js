@@ -1,6 +1,5 @@
-import { getCard } from "../data/cards.js";
+import { chapterOf, getCard, getLesson, lessonIds } from "../data/catalog.js";
 import { AWLS } from "../data/skills.js";
-import { getLesson, lessonIds } from "../data/lessons.js";
 import {
   finishLesson,
   gradeCard,
@@ -289,7 +288,7 @@ function endScreen(ctx, lesson) {
     `;
     const main = `
       ${bar(passed ? total : correct, total || 1)}
-      <p class="eyebrow">Chapter 1 checkpoint</p>
+      <p class="eyebrow">Chapter ${chapterOf(lesson.id)?.number ?? ""} checkpoint</p>
       <h2 class="prompt">${passed ? "Checkpoint clear." : "Not yet."}</h2>
       <p class="score">${correct}/${total}</p>
       <p class="body">${
@@ -348,7 +347,7 @@ function endScreen(ctx, lesson) {
       ${
         next
           ? `<p class="fine">Next: ${esc(next.title)} · ${next.minutes} min</p>`
-          : `<p class="fine">Chapter 1 lessons are complete.</p>`
+          : `<p class="fine">The open lessons are complete.</p>`
       }
     </div>
     ${disclaimer()}
